@@ -1,12 +1,14 @@
 const http = require('https');
 queryString = require('querystring');
 
+var config = require('./config.json');
+
 // prepare AAD API Post Body Data
 var postData = queryString.stringify({
     'grant_type': 'client_credentials',
-    'client_id': 'e9858ba0-f9c2-4046-b5a0-6446f32fe35f',
+    'client_id': config['azure-ad-clientid'],
     'resource':'https://api.loganalytics.io/',
-    'client_secret':'3b105647-2b94-4cb7-9c0b-641f6f5e397b'
+    'client_secret': config['azure-ad-secret']
 });
 
 console.log(postData);
@@ -16,7 +18,7 @@ var contentLength = postData.length;
 var options = {
     host: 'login.microsoftonline.com',
     port: 443,
-    path: '/72f988bf-86f1-41af-91ab-2d7cd011db47/oauth2/token',
+    path: '/' + config['azure-ad-tenant'] + '/oauth2/token',
     method: 'POST',
     headers: {
         'Content-Type' : 'application/x-www-form-urlencoded',
@@ -35,7 +37,7 @@ var options = {
             host : 'api.loganalytics.io',
             port: 443,
             method: 'POST',
-            path: '/v1/workspaces/80a65063-8611-4b2f-8105-c8501f847eb7/query',
+            path: '/v1/workspaces/' + config['loganalytics-workspace-id'] + '/query',
             headers: {
                 'Authorization': 'Bearer ' + token['access_token'],
                 'Content-Type' : 'application/json'
@@ -68,10 +70,10 @@ var options = {
 
                     // open mysql connection
                     var con = mysql.createConnection({
-                        host: "mysqlsvr01.mysql.database.azure.com",
-                        user: "scott@mysqlsvr01",
-                        password: "@zure12345678",
-                        database: "billingdb"
+                        host: config['mysql-db-server'],
+                        user: config['mysql-db-user'],
+                        password: config['mysql-db-password'],
+                        database: config['mysql-db-name']
                     });
                     con.connect(function(err){
                         if (err) throw err;
@@ -102,10 +104,10 @@ var options = {
         // calculate new start & end date time
         var startDate = new Date();
         var endDate = new Date();
-        startDate.setMinutes(startDate.getMinutes() - 15);
+        startDate.setMinutes(startDate.getMinutes() - (config['default-frequency-in-min']*2));
         
         // end date is always NOW - 5 minutes accomodating log analytics delay
-        endDate.setMinutes(endDate.getMinutes() - 10);
+        endDate.setMinutes(endDate.getMinutes() - config['default-frequency-in-min']);
 
         // form the log analytics query
         

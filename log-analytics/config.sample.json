@@ -1,0 +1,13 @@
+{
+    "loganalytics-workspace-id" : "<log analytics workspace id>",
+    "azure-ad-tenant" : "<azure ad tenant id>",
+    "azure-ad-clientid" : "<azure ad client id from SPN creation>",
+    "azure-ad-secret" : "<azure ad client secret from SPN creation>",
+    "mysql-db-server" : "<mysql db server>",
+    "mysql-db-user" : "<mysql db username>",
+    "mysql-db-password" : "<my sql db password>",
+    "mysql-db-name" : "<mysql db name>",
+    "azure-storage-account" : "<log analytics run storage account>",
+    "azure-storage-account-key" : "<log analytics run storage account key>",
+    "default-frequency-in-min" : 5
+}

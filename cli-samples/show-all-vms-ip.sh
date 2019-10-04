@@ -1,0 +1,1 @@
+az network nic list --query '[].{Name:name,Location:location,VM:virtualMachine.id,rg:resourceGroup,ip:ipConfigurations[0].privateIpAddress}' -o table
